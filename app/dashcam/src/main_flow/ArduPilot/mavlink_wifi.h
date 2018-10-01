@@ -11,6 +11,8 @@ void mavlink_show_stats(void);
 void mavlink_set_debug(uint8_t debug_level);
 int mavlink_set_flight_response(int index, int value);
 void mavlink_set_sitl(bool enable);
+void mavlink_set_dst_ip(uint32_t ip);
+void mavlink_set_dst_port(uint16_t port);
 int mavlink_fc_send(mavlink_message_t *msg);
 bool toggle_recording(void);
 bool take_snapshot(void);
