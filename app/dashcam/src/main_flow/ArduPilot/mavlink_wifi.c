@@ -47,6 +47,8 @@ static int sitl_sock = -1;
 static char stm32_id[40];
 static bool rc_ok;
 static bool vehicle_armed;
+static uint32_t mavlink_dst_ip = INADDR_BROADCAST;
+static uint16_t mavlink_dst_port = MAVLINK_DEST_PORT;
 
 #define QUEUE_SIZE 50*1024
 
@@ -237,8 +239,10 @@ static void send_mavlink_wifi(int fd, mavlink_message_t *msg)
         memset(&addr, 0x0, sizeof(addr));
 
         addr.sin_family = AF_INET;
-        addr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
-        addr.sin_port = htons(MAVLINK_DEST_PORT);
+        /* addr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
+        addr.sin_port = htons(MAVLINK_DEST_PORT); */
+	addr.sin_addr.s_addr = mavlink_dst_ip;
+        addr.sin_port = htons(mavlink_dst_port);
         
         //console_printf("sending pkt of len %u\n", len);
         sendto(fd, buf, len, 0, (struct sockaddr*)&addr, sizeof(addr));
@@ -1472,6 +1476,15 @@ void mavlink_set_sitl(bool enable)
         }
     }
     console_printf("mavlink_sitl=%s\n", enable?"true":"false");
+}
+
+void mavlink_set_dst_ip(uint32_t ip)
+{
+    mavlink_dst_ip = ip;
+}
+ void mavlink_set_dst_port(uint16_t port)
+{
+    mavlink_dst_port = port;
 }
 
 enum FlightCommand {
