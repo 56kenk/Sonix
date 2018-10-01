@@ -966,6 +966,11 @@ static void check_wifi_txt(void)
         if (strcmp(name, "CHANNEL") == 0) {
             channel = atoi(value);
         }
+	if (strcmp(name, "MAVLINK_DST_IP") == 0) {
+            mavlink_set_dst_ip(inet_addr(value));
+	} else if (strcmp(name, "MAVLINK_DST_PORT") == 0) {
+            mavlink_set_dst_port(atoi(value));
+        }
     }
 
     WiFi_QueryAndSet(SET_BEACON_OFF, NULL, NULL);
